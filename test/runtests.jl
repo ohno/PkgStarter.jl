@@ -2,5 +2,5 @@ using PkgStarter
 using Test
 
 @testset "PkgStarter.jl" begin
-    # Write your tests here.
+    @test PkgStarter.check_status_code()
 end
