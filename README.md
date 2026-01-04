@@ -20,7 +20,7 @@ julia -i -E 'using Revise; import Pkg; Pkg.activate("."); using PkgStarter; PkgS
 ```
 
 ```
-julia --project=. -e 'import Pkg; Pkg.instantiate()'
-julia --project=. -e 'import Pkg; Pkg.resolve()'
 julia --project=. -e 'import Pkg; Pkg.update()'
+julia --project=. -e 'import Pkg; Pkg.resolve()'
+julia --project=. -e 'import Pkg; Pkg.instantiate()'
 ```
