@@ -5,6 +5,22 @@
 [![Build Status](https://github.com/ohno/PkgStarter.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/ohno/PkgStarter.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/ohno/PkgStarter.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/ohno/PkgStarter.jl)
 
-## Citing
+## Documentation
+
+See https://ohno.github.io/PkgStarter.jl.
+
+## Citation
 
 See [`CITATION.bib`](CITATION.bib) for the relevant reference(s).
+
+## Developer's Guide
+
+```
+julia -i -E 'using Revise; import Pkg; Pkg.activate("."); using PkgStarter; PkgStarter.hello()'
+```
+
+```
+julia --project=. -e 'import Pkg; Pkg.instantiate()'
+julia --project=. -e 'import Pkg; Pkg.resolve()'
+julia --project=. -e 'import Pkg; Pkg.update()'
+```
