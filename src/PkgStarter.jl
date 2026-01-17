@@ -2,11 +2,12 @@ module PkgStarter
 
 # Packages
 
-using HTTP
-using JSON3
-using GitHub
-using Sodium
-using Base64
+import HTTP
+import JSON3
+import GitHub
+import Sodium
+import Base64
+import URIs
 
 # Variables
 
@@ -18,10 +19,6 @@ function hello()
 end
 
 # Authorization
-
-# using HTTP
-# using JSON3
-# using GitHub
 
 function check_status_code()::Bool
     response = HTTP.get(
@@ -78,12 +75,6 @@ function get_user_info(access_token::String)
 end
 
 # Repository
-
-# using HTTP
-# using JSON3
-# using GitHub
-# using Sodium
-# using Base64
 
 function check_repo(access_token::String, owner_name::String, repo_name::String)
     response = HTTP.get(
@@ -225,14 +216,14 @@ function commit_file_on_github(access_token::String, owner_name::String, repo_na
     if isnothing(file)
         params = Dict(
             "message" => commit_message,
-            "content" => base64encode(content),
+            "content" => Base64.base64encode(content),
             "branch"  => branch_name,
         )
         GitHub.create_file(repo, path; auth = auth, params = params)
     else
         params = Dict(
             "message" => commit_message,
-            "content" => base64encode(content),
+            "content" => Base64.base64encode(content),
             "branch"  => branch_name,
             "sha"     => file.sha,
         )
