@@ -1,5 +1,6 @@
 using PkgStarter
 using Documenter
+using DocumenterMermaid
 
 DocMeta.setdocmeta!(PkgStarter, :DocTestSetup, :(using PkgStarter); recursive=true)
 
@@ -14,6 +15,8 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
+        "API reference" => "api.md",
+        "Developer's Guide" => "dev.md",
     ],
 )
 

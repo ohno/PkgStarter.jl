@@ -8,6 +8,7 @@ import GitHub
 import Sodium
 import Base64
 import URIs
+import DocStringExtensions
 
 # Variables
 
@@ -20,6 +21,9 @@ end
 
 # Authorization
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function check_status_code()::Bool
     response = HTTP.get(
         "https://api.github.com/meta";
@@ -30,6 +34,9 @@ function check_status_code()::Bool
     return response.status == 200
 end
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function device_flow_begin(client_id::String)::JSON3.Object
     response = HTTP.post(
         "https://github.com/login/device/code";
@@ -44,6 +51,9 @@ function device_flow_begin(client_id::String)::JSON3.Object
 end
 
 # function device_flow_end(client_id::String, client_secret::String, device_code::String)
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function device_flow_end(client_id::String, device_code::String)
     response = HTTP.post(
         "https://github.com/login/oauth/access_token";
@@ -58,6 +68,10 @@ function device_flow_end(client_id::String, device_code::String)
     return JSON3.read(String(response.body))
 end
 
+
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function get_user_info(access_token::String)
     # response = HTTP.get(
     #   "https://api.github.com/user";
@@ -76,6 +90,9 @@ end
 
 # Repository
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function check_repo(access_token::String, owner_name::String, repo_name::String)
     response = HTTP.get(
         "https://api.github.com/repos/$(owner_name)/$(repo_name)";
@@ -90,6 +107,9 @@ function check_repo(access_token::String, owner_name::String, repo_name::String)
     return response.status == 200
 end
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function create_repo(access_token::String, owner_name::String, repo_name::String)
     # def owner
     owner = GitHub.owner(owner_name)
@@ -128,6 +148,9 @@ function create_repo(access_token::String, owner_name::String, repo_name::String
     end
 end
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function set_repository_secret(access_token::String, owner_name::String, repo_name::String, secret_name::String, secret_value::String)
 
     # https://github.com/JuliaWeb/GitHub.jl?tab=readme-ov-file#ssh-keys
@@ -153,14 +176,23 @@ function set_repository_secret(access_token::String, owner_name::String, repo_na
     return response.status in [201, 204]
 end
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function get_codecov_url(owner_name::String, repo_name::String)::String
     return "https://app.codecov.io/gh/$(owner_name)/$(repo_name)"
 end
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function set_codecov(access_token::String, owner_name::String, repo_name::String, codecov_token::String)
     return set_repository_secret(access_token, owner_name, repo_name, "CODECOV_TOKEN", codecov_token)
 end
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function set_deploy_key(access_token::String, owner_name::String, repo_name::String)
     # https://github.com/JuliaWeb/GitHub.jl?tab=readme-ov-file#ssh-keys
     pubkey, privkey = GitHub.genkeys()
@@ -186,6 +218,9 @@ end
 
 # Commit
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function get_file_on_github(access_token::String, owner_name::String, repo_name::String, repo_path::String)
     auth = GitHub.authenticate(access_token)
     repo = GitHub.repo("$(owner_name)/$(repo_name)"; auth = auth)
@@ -193,6 +228,9 @@ function get_file_on_github(access_token::String, owner_name::String, repo_name:
     return file
 end
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function check_file_on_github(access_token::String, owner_name::String, repo_name::String, branch_name::String, repo_path::String)
     try
         get_file_on_github(access_token, owner_name, repo_name, repo_path)
@@ -202,6 +240,9 @@ function check_file_on_github(access_token::String, owner_name::String, repo_nam
     end
 end
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function commit_file_on_github(access_token::String, owner_name::String, repo_name::String, branch_name::String, commit_message::String, path::String, content::String)
 
     auth = GitHub.authenticate(access_token)
@@ -232,6 +273,9 @@ function commit_file_on_github(access_token::String, owner_name::String, repo_na
 
 end
 
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
 function commit_files_on_github(
     access_token::String,
     owner_name::String,

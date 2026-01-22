@@ -15,12 +15,4 @@ See [`CITATION.bib`](CITATION.bib) for the relevant reference(s).
 
 ## Developer's Guide
 
-```
-julia -i -E 'using Revise; import Pkg; Pkg.activate("."); using PkgStarter; PkgStarter.hello()'
-```
-
-```
-julia --project=. -e 'import Pkg; Pkg.update()'
-julia --project=. -e 'import Pkg; Pkg.resolve()'
-julia --project=. -e 'import Pkg; Pkg.instantiate()'
-```
+See https://ohno.github.io/PkgStarter.jl/dev/.
