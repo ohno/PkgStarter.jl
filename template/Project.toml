@@ -1,0 +1,7 @@
+name = "template"
+uuid = "5cbb07bb-4b01-477c-a178-ef3f1b07960b"
+authors = ["AUTHOR1", "AUTHOR2"]
+version = "0.0.1"
+
+[compat]
+julia = "1.11"
