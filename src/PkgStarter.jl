@@ -38,16 +38,27 @@ end
 $(DocStringExtensions.TYPEDSIGNATURES)
 """
 function device_flow_begin(client_id::String)::JSON3.Object
-    response = HTTP.post(
-        "https://github.com/login/device/code";
-        headers = [
-            "Accept" => "application/json",
-            "Content-Type" => "application/x-www-form-urlencoded",
-            "User-Agent" => "PkgStarter.jl",
-        ],
-        body = "client_id=$(client_id)&scope=read:user%20public_repo%20repo",
-    )
-    return JSON3.read(String(response.body))
+    try
+        response = HTTP.post(
+            "https://github.com/login/device/code";
+            headers = [
+                "Accept" => "application/json",
+                "Content-Type" => "application/x-www-form-urlencoded",
+                "User-Agent" => "PkgStarter.jl",
+            ],
+            body = "client_id=$(client_id)&scope=read:user%20public_repo%20repo",
+        )
+        return JSON3.read(String(response.body))
+    catch e
+        # @error "device_flow_begin: $(e)"
+        return JSON3.read(JSON3.write((
+            device_code      = "",
+            user_code        = "",
+            verification_uri = "",
+            expires_in       = 0,
+            interval         = 0,
+        )))
+    end
 end
 
 # function device_flow_end(client_id::String, client_secret::String, device_code::String)
@@ -55,37 +66,39 @@ end
 $(DocStringExtensions.TYPEDSIGNATURES)
 """
 function device_flow_end(client_id::String, device_code::String)
-    response = HTTP.post(
-        "https://github.com/login/oauth/access_token";
-        headers = [
-            "Accept" => "application/json",
-            "Content-Type" => "application/x-www-form-urlencoded",
-            "User-Agent" => "PkgStarter.jl",
-        ],
-        # body = "client_id=$(client_id)&device_code=$(device_code)&grant_type=urn:ietf:params:oauth:grant-type:device_code&client_secret=$(client_secret)"
-        body = "client_id=$(client_id)&device_code=$(device_code)&grant_type=urn:ietf:params:oauth:grant-type:device_code",
-    )
-    return JSON3.read(String(response.body))
+    try
+        response = HTTP.post(
+            "https://github.com/login/oauth/access_token";
+            headers = [
+                "Accept" => "application/json",
+                "Content-Type" => "application/x-www-form-urlencoded",
+                "User-Agent" => "PkgStarter.jl",
+            ],
+            # body = "client_id=$(client_id)&device_code=$(device_code)&grant_type=urn:ietf:params:oauth:grant-type:device_code&client_secret=$(client_secret)"
+            body = "client_id=$(client_id)&device_code=$(device_code)&grant_type=urn:ietf:params:oauth:grant-type:device_code",
+        )
+        return JSON3.read(String(response.body))
+    catch e
+        # @error "device_flow_end: $(e)"
+        return JSON3.read(JSON3.write((
+            access_token             = "",
+            expires_in               = 0,
+            refresh_token            = "",
+            refresh_token_expires_in = 0,
+            token_type               = "",
+            scope                    = "",
+        )))
+    end
 end
-
 
 """
 $(DocStringExtensions.TYPEDSIGNATURES)
 """
-function get_user_info(access_token::String)
-    # response = HTTP.get(
-    #   "https://api.github.com/user";
-    #   headers = [
-    #     "Accept" => "application/vnd.github+json",
-    #     "Authorization" => "Bearer $(access_token)",
-    #     "X-GitHub-Api-Version" => "2022-11-28",
-    #     "User-Agent" => "PkgStarter.jl"
-    #   ],
-    # )
-    # return JSON3.read(String(response.body))
+function get_user_domain(access_token::String)
     auth = GitHub.authenticate(access_token)
-    api = isdefined(GitHub, :DEFAULT_API) ? GitHub.DEFAULT_API : GitHub.GitHubWebAPI(URIs.URI("https://api.github.com"))
-    return GitHub.gh_get(api, "/user"; auth = auth)
+    owner = GitHub.whoami(; auth=auth)
+    orgs = GitHub.orgs(owner, auth=auth)
+    return [owner.login, [org.login for org in orgs[1]]...]
 end
 
 # Repository
@@ -94,57 +107,54 @@ end
 $(DocStringExtensions.TYPEDSIGNATURES)
 """
 function check_repo(access_token::String, owner_name::String, repo_name::String)
-    response = HTTP.get(
-        "https://api.github.com/repos/$(owner_name)/$(repo_name)";
-        headers = [
-            "Accept" => "application/vnd.github+json",
-            "Authorization" => "Bearer $(access_token)",
-            "X-GitHub-Api-Version" => "2022-11-28",
-            "User-Agent" => "PkgStarter.jl",
-        ],
-        status_exception = false,
-    )
-    return response.status == 200
+    try
+        response = HTTP.get(
+            "https://api.github.com/repos/$(owner_name)/$(repo_name)";
+            headers = [
+                "Accept" => "application/vnd.github+json",
+                "Authorization" => "Bearer $(access_token)",
+                "X-GitHub-Api-Version" => "2022-11-28",
+                "User-Agent" => "PkgStarter.jl",
+            ],
+            status_exception = false,
+        )
+        return response.status == 200
+    catch e
+        return false
+    end
 end
 
 """
 $(DocStringExtensions.TYPEDSIGNATURES)
 """
 function create_repo(access_token::String, owner_name::String, repo_name::String)
-    # def owner
     owner = GitHub.owner(owner_name)
     if owner.typ == "User"
         url = "https://api.github.com/user/repos"
     elseif owner.typ == "Organization"
         url = "https://api.github.com/orgs/$(owner_name)/repos"
     end
-
-    # auth = GitHub.authenticate(access_token)
-    # params = Dict(
-    #     "description" => "",
-    #     "private"     => false,
-    #     "auto_init"   => false,
-    # )
-    # repo = GitHub.create_repo(owner, repo_name; auth=auth, params=params)
-
     body = JSON3.write(Dict("name" => repo_name, "private" => false, "auto_init" => false))
-
-    response = HTTP.post(
-        url;
-        headers = [
-            "Accept" => "application/vnd.github+json",
-            "Authorization" => "Bearer $(access_token)",
-            "X-GitHub-Api-Version" => "2022-11-28",
-            "User-Agent" => "PkgStarter.jl",
-        ],
-        body = body,
-        status_exception = false,
-    )
-
-    if response.status in [200, 201]
+    try
+        response = HTTP.post(
+            url;
+            headers = [
+                "Accept" => "application/vnd.github+json",
+                "Authorization" => "Bearer $(access_token)",
+                "X-GitHub-Api-Version" => "2022-11-28",
+                "User-Agent" => "PkgStarter.jl",
+            ],
+            body = body,
+            status_exception = false,
+        )
         return JSON3.read(String(response.body))
-    else
-        error("Failed to create repository: $(response.status) - $(String(response.body))")
+    catch e
+        # error("Failed to create repository: $(response.status) - $(String(response.body))")
+        return JSON3.read(JSON3.write((
+            name = "",
+            full_name = "",
+            description = "",
+        )))
     end
 end
 
@@ -162,18 +172,21 @@ function set_repository_secret(access_token::String, owner_name::String, repo_na
     encrypted = Sodium.seal(Vector{UInt8}(secret_value), gpk.key) # repair of GitHub.SodiumSeal.seal(base64encode(secret_value), GitHub.SodiumSeal.KeyPair(gpk.key))
 
     # set secret
-    response = GitHub.gh_put(
-        GitHub.DEFAULT_API,
-        "/repos/$(owner_name)/$(repo_name)/actions/secrets/$(secret_name)";
-        handle_error = false,
-        params = Dict(
-            "encrypted_value" => encrypted,
-            "key_id" => gpk.key_id,
-        ),
-        auth = auth,
-    )
-
-    return response.status in [201, 204]
+    try
+        response = GitHub.gh_put(
+            GitHub.DEFAULT_API,
+            "/repos/$(owner_name)/$(repo_name)/actions/secrets/$(secret_name)";
+            handle_error = false,
+            params = Dict(
+                "encrypted_value" => encrypted,
+                "key_id" => gpk.key_id,
+            ),
+            auth = auth,
+        )
+        return response.status in [201, 204]
+    catch e
+        return false
+    end
 end
 
 """
@@ -198,23 +211,31 @@ function set_deploy_key(access_token::String, owner_name::String, repo_name::Str
     pubkey, privkey = GitHub.genkeys()
     auth = GitHub.authenticate(access_token)
     repo = GitHub.repo("$(owner_name)/$(repo_name)"; auth = auth)
-    response1 = GitHub.create_deploykey(
-        repo;
-        auth = auth,
-        params = Dict(
-            "key" => pubkey,
-            "title" => "Documenter",
-            "read_only" => false,
-            "handle_error" => false,
-        ),
-    )
-    response2 = PkgStarter.set_repository_secret(access_token, owner_name, repo_name, "DEPLOY_KEY", privkey)
-    if !isnothing(response1.id) && response2
-        return true
-    else
+    try
+        response1 = GitHub.create_deploykey(
+            repo;
+            auth = auth,
+            params = Dict(
+                "key" => pubkey,
+                "title" => "Documenter",
+                "read_only" => false,
+                "handle_error" => false,
+            ),
+        )
+        response2 = PkgStarter.set_repository_secret(access_token, owner_name, repo_name, "DEPLOY_KEY", privkey)
+        if !isnothing(response1.id) && response2
+            return true
+        else
+            return false
+        end
+    catch e
         return false
     end
 end
+
+# function genkeys(user_name::String, repo_name::String)
+#     return DocumenterTools.genkeys(; user = user_name, repo = repo_name)
+# end
 
 # Commit
 
@@ -275,6 +296,27 @@ end
 
 """
 $(DocStringExtensions.TYPEDSIGNATURES)
+
+```julia
+access_token = "YOUR_ACCESS_TOKEN"
+owner_name = "user"
+repo_name = "my-github-repo"
+branch_name = "main"
+commit_message = "Update hello1.md and hello2.md"
+paths_and_contents = Dict(
+    "hello1.md" => "Hello, 1",
+    "hello2.md" => "Hello, 2",
+)
+
+PkgStarter.commit_files_on_github(
+    access_token,
+    owner_name,
+    repo_name,
+    branch_name,
+    commit_message,
+    paths_and_contents,
+)
+```
 """
 function commit_files_on_github(
     access_token::String,
