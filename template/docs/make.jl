@@ -1,23 +1,23 @@
-using template
+using {{{PKG}}}
 using Documenter
 
-DocMeta.setdocmeta!(template, :DocTestSetup, :(using template); recursive=true)
+DocMeta.setdocmeta!({{{PKG}}}, :DocTestSetup, :(using {{{PKG}}}); recursive=true)
 
 makedocs(;
-    modules=[template],
-    authors="AUTHOR1, AUTHOR2",
-    sitename="template.jl",
-    format=Documenter.HTML(;
-        canonical="https://OWNER_NAME.github.io/template.jl",
-        edit_link="main",
-        assets=String[],
+    modules = [{{{PKG}}}],
+    authors = "{{{AUTHORS}}}",
+    sitename = "{{{PKG}}}.jl",
+    format = Documenter.HTML(;
+        canonical = "https://{{{OWNER}}}.github.io/{{{PKG}}}.jl",
+        edit_link = "main",
+        assets = String[],
     ),
-    pages=[
+    pages = [
         "Home" => "index.md",
     ],
 )
 
 deploydocs(;
-    repo="github.com/OWNER_NAME/template.jl",
-    devbranch="main",
+    repo = "github.com/{{{OWNER}}}/{{{PKG}}}.jl",
+    devbranch = "main",
 )

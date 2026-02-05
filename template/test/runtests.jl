@@ -1,6 +1,6 @@
-using template
+using {{{PKG}}}
 using Test
 
-@testset "template.jl" begin
-    # Write your tests here.
+@testset "{{{PKG}}}.jl" begin
+    @test {{{PKG}}}.hello() == "Hello, World!"
 end

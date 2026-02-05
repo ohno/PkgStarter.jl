@@ -9,6 +9,11 @@ import Sodium
 import Base64
 import URIs
 import DocStringExtensions
+import PkgTemplates
+import Mustache
+import UUIDs
+import Dates
+# import Oxygen
 
 # Variables
 
@@ -359,6 +364,101 @@ function commit_files_on_github(
         "ref" => ref_name,
         "sha" => new_commit.sha,
     ))
+end
+
+# Template
+
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+
+```julia
+PkgStarter.update_template("OWNER_NAME", "template", ["AUTHOR1", "AUTHOR2"])
+```
+"""
+function update_template(owner_name::String, repo_name::String, author_names::Vector{String})::Dict{String, String}
+    template = PkgTemplates.Template(;
+        dir = "$(@__DIR__)/../",
+        user = owner_name,
+        authors = author_names,
+        julia = v"1.11",
+        plugins = [
+            # https://juliaci.github.io/PkgTemplates.jl/stable/user/#Default-Plugins
+            PkgTemplates.ProjectFile(; version = v"0.0.1"),
+            PkgTemplates.SrcDir(),
+            PkgTemplates.Tests(; project = true),
+            PkgTemplates.Readme(),
+            PkgTemplates.License(),
+            # PkgTemplates.Git(; ignore = ["*/Manifest.toml"]),
+            PkgTemplates.GitHubActions(; extra_versions = ["1.11"]),
+            PkgTemplates.CompatHelper(),
+            PkgTemplates.TagBot(),
+            # PkgTemplates.Secret(),
+            PkgTemplates.Dependabot(),
+            # https://juliaci.github.io/PkgTemplates.jl/stable/user/#Code-Coverage
+            PkgTemplates.Codecov(),
+            # https://juliaci.github.io/PkgTemplates.jl/stable/user/#Documentation
+            PkgTemplates.Documenter{PkgTemplates.GitHubActions}(),
+            # https://juliaci.github.io/PkgTemplates.jl/stable/user/#Miscellaneous
+            PkgTemplates.Citation(; readme = true),
+            # PkgTemplates.Formatter(),
+        ],
+    )
+    return template(repo_name)
+end
+
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
+function list_files()
+    return [joinpath(dir, f) for (dir, _, fs) in walkdir("$(dirname(@__FILE__()))/../template") for f in fs]
+end
+
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
+function load_file(path::String)::String
+    try
+        file = open(path, "r")
+        text = Base.read(file, String)
+        close(file)
+        return text
+    catch
+        return ""
+    end
+end
+
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
+function generate_template_dict(owner_name::String, repo_name::String, author_names::Vector{String})
+
+    ctx = Dict(
+        "PKG"      => repo_name,
+        "OWNER"    => owner_name,
+        "UUID"     => string(UUIDs.uuid4()),
+        "AUTHORS"  => author_names,
+        "LICENSOR" => join(author_names, ", "),
+        "URL"      => "https://github.com/$(owner_name)/$(repo_name).jl",
+        "VERSION"  => "v0.0.1",
+        "YEAR"     => Dates.year(Dates.today()),
+        "MONTH"    => Dates.month(Dates.today()),
+    )
+
+    paths_and_contents = Dict{String, String}()
+
+    for path in PkgStarter.list_files()
+        key = relpath(path, "$(@__DIR__)/../template")
+        key = replace(key, "\\" => "/")
+        if key == "src/PKG.jl"
+            key = "src/$(repo_name).jl"
+        end
+        text = PkgStarter.load_file(path)
+        rendered = Mustache.render(text, ctx)
+        paths_and_contents[key] = rendered
+    end
+    
+    return paths_and_contents
+
 end
 
 end

@@ -11,11 +11,13 @@ DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
 GitHub = "bc5e4493-9b4d-5f90-b8aa-2b2bcaad7a26"
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+Mustache = "ffc61752-8dc7-55ee-8c37-f3e9cdd09e70"
 Oxygen = "df9a0d86-3283-4920-82dc-4555fc0d1d8b"
 PkgTemplates = "14b8a8f1-9102-5b29-a752-f990bacb7fe1"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 Sodium = "4f5b5e99-b0ad-42cd-b47a-334e172ec8bd"
 URIs = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
+UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
 [compat]
 DocumenterTools = "0.1.21"

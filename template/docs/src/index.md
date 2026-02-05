@@ -1,14 +1,23 @@
 ```@meta
-CurrentModule = template
+CurrentModule = {{{PKG}}}
 ```
 
-# template
+# {{{PKG}}}.jl
 
-Documentation for [template](https://github.com/OWNER_NAME/template.jl).
+Documentation for [{{{PKG}}}.jl](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl).
+
+## Quick Start
+
+```julia
+import Pkg; Pkg.add("{{{PKG}}}")
+import {{{PKG}}}; {{{PKG}}}.hello()
+```
+
+# API reference
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [template]
+Modules = [{{{PKG}}}]
 ```
