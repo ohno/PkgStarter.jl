@@ -5,7 +5,7 @@ DocMeta.setdocmeta!({{{PKG}}}, :DocTestSetup, :(using {{{PKG}}}); recursive=true
 
 makedocs(;
     modules = [{{{PKG}}}],
-    authors = "{{{AUTHORS}}}",
+    authors = "{{{LICENSOR}}}",
     sitename = "{{{PKG}}}.jl",
     format = Documenter.HTML(;
         canonical = "https://{{{OWNER}}}.github.io/{{{PKG}}}.jl",
@@ -14,6 +14,7 @@ makedocs(;
     ),
     pages = [
         "Home" => "index.md",
+        "API Reference" => "api.md",
     ],
 )
 
