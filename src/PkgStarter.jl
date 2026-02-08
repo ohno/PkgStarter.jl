@@ -139,7 +139,12 @@ function create_repo(access_token::String, owner_name::String, repo_name::String
     elseif owner.typ == "Organization"
         url = "https://api.github.com/orgs/$(owner_name)/repos"
     end
-    body = JSON3.write(Dict("name" => repo_name, "private" => false, "auto_init" => false))
+    body = JSON3.write(Dict(
+        "name" => repo_name,
+        "private" => false,
+        "homepage" => "https://$(owner_name).github.io/$(repo_name)",
+        "auto_init" => true,
+    )) # auto_init = true is required to use commit_files_on_github()
     try
         response = HTTP.post(
             url;
@@ -160,6 +165,21 @@ function create_repo(access_token::String, owner_name::String, repo_name::String
             full_name = "",
             description = "",
         )))
+    end
+end
+
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
+function create_branch_gh_pages(access_token::String, owner_name::String, repo_name::String)::Bool
+    auth = GitHub.authenticate(access_token)
+    repo = GitHub.repo("$(owner_name)/$(repo_name)"; auth = auth)
+    try
+        sha = GitHub.reference(repo, "heads/main"; auth=auth).object["sha"]
+        response = GitHub.create_reference(repo; auth=auth, params=Dict("ref" => "refs/heads/gh-pages", "sha" => sha))
+        return true
+    catch e
+        return false
     end
 end
 
@@ -274,9 +294,11 @@ function commit_file_on_github(access_token::String, owner_name::String, repo_na
     auth = GitHub.authenticate(access_token)
     repo = GitHub.repo("$(owner_name)/$(repo_name)"; auth = auth)
 
-    file = try 
+    file = try
+        @info "get_file_on_github: $(path)"
         get_file_on_github(access_token, owner_name, repo_name, path)
     catch
+        @info "get_file_on_github: $(path) not found"
         nothing
     end
 
@@ -287,6 +309,7 @@ function commit_file_on_github(access_token::String, owner_name::String, repo_na
             "branch"  => branch_name,
         )
         GitHub.create_file(repo, path; auth = auth, params = params)
+        @info "create_file: $(path)"
     else
         params = Dict(
             "message" => commit_message,
@@ -295,12 +318,20 @@ function commit_file_on_github(access_token::String, owner_name::String, repo_na
             "sha"     => file.sha,
         )
         GitHub.update_file(repo, path; auth = auth, params = params)
+        @info "update_file: $(path)"
     end
 
 end
 
 """
+!!! warning
+    This function does not work for initial commit.
+
+Signature:
+
 $(DocStringExtensions.TYPEDSIGNATURES)
+    
+Example:
 
 ```julia
 access_token = "YOUR_ACCESS_TOKEN"
@@ -369,7 +400,11 @@ end
 # Template
 
 """
+Signature:
+
 $(DocStringExtensions.TYPEDSIGNATURES)
+
+Example:
 
 ```julia
 PkgStarter.update_template("OWNER_NAME", "template", ["AUTHOR1", "AUTHOR2"])
@@ -433,12 +468,13 @@ $(DocStringExtensions.TYPEDSIGNATURES)
 function generate_template_dict(owner_name::String, repo_name::String, author_names::Vector{String})
 
     ctx = Dict(
-        "PKG"      => repo_name,
+        "PKG"      => replace(repo_name, ".jl" => ""),
+        "REPO"     => repo_name,
         "OWNER"    => owner_name,
         "UUID"     => string(UUIDs.uuid4()),
         "AUTHORS"  => author_names,
         "LICENSOR" => join(author_names, ", "),
-        "URL"      => "https://github.com/$(owner_name)/$(repo_name).jl",
+        "URL"      => "https://github.com/$(owner_name)/$(repo_name)",
         "VERSION"  => "v0.0.1",
         "YEAR"     => Dates.year(Dates.today()),
         "MONTH"    => Dates.month(Dates.today()),
@@ -450,10 +486,14 @@ function generate_template_dict(owner_name::String, repo_name::String, author_na
         key = relpath(path, "$(@__DIR__)/../template")
         key = replace(key, "\\" => "/")
         if key == "src/PKG.jl"
-            key = "src/$(repo_name).jl"
+            key = "src/$(ctx["PKG"]).jl"
         end
         text = PkgStarter.load_file(path)
-        rendered = Mustache.render(text, ctx)
+        rendered = if key[end-3:end] == ".yml" && key[end-5:end] != "CI.yml"
+            text
+        else
+            Mustache.render(text, ctx)
+        end
         paths_and_contents[key] = rendered
     end
     
