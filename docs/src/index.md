@@ -25,7 +25,7 @@ import PkgStarter
 PkgStarter.GUI()
 ```
 
-## API reference
+## API Reference
 
 ```@index
 ```
