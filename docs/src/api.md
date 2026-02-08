@@ -2,7 +2,7 @@
 CurrentModule = PkgStarter
 ```
 
-# API reference
+# API Reference
 
 ```@index
 ```

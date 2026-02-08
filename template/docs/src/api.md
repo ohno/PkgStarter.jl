@@ -2,7 +2,7 @@
 CurrentModule = {{{PKG}}}
 ```
 
-# API reference
+# API Reference
 
 ```@index
 ```

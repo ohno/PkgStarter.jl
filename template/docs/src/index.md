@@ -9,7 +9,7 @@ Documentation for [{{{PKG}}}.jl](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl).
 ## Install
 
 ```julia
-import Pkg; Pkg.add(url="https://github.com/{{{OWNER}}}//{{{PKG}}}.jl.git")
+import Pkg; Pkg.add(url="https://github.com/{{{OWNER}}}/{{{PKG}}}.jl.git")
 ```
 
 ## Quick Start
