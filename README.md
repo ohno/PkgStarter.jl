@@ -13,6 +13,6 @@ See https://ohno.github.io/PkgStarter.jl.
 
 See [`CITATION.bib`](CITATION.bib) for the relevant reference(s).
 
-## Developer's Guide
+## Developer Guide
 
 See https://ohno.github.io/PkgStarter.jl/dev/.
