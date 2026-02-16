@@ -1,4 +1,6 @@
-# Developer's Guide
+# Developer Guide
+
+This page describes how to develop PkgStarter.jl locally (tests, docs, and common maintenance tasks). For feature requests or behavior changes, please open an Issue first to discuss motivation, use-cases, and compatibility. Once we agree on the direction, PRs are welcome.
 
 Generate Documentation:
 
