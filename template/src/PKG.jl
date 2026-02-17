@@ -4,6 +4,9 @@ module {{{PKG}}}
 
 import DocStringExtensions
 
+# Public API
+# Types & Structures
+# Constants
 # Functions
 
 """

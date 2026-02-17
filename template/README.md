@@ -10,10 +10,10 @@
 
 See https://{{{OWNER}}}.github.io/{{{PKG}}}.jl.
 
-## Citation
+## User Guide
 
-See [`CITATION.bib`](CITATION.bib) for the relevant reference(s).
+See https://{{{OWNER}}}.github.io/{{{PKG}}}.jl/dev/user.
 
 ## Developer Guide
 
-See https://{{{OWNER}}}.github.io/{{{PKG}}}.jl/dev/dev.
+See https://{{{OWNER}}}.github.io/{{{PKG}}}.jl/dev/developer.

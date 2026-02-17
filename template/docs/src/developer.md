@@ -8,7 +8,9 @@ This page describes how to contribute to [{{{PKG}}}.jl](https://github.com/{{{OW
 
 ## Contributing
 
-The [ColPrac](https://github.com/SciML/ColPrac) guidelines is recommended. Please open an [issue](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues) before starting significant work.
+Please open an [issue](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues) before starting significant work. The [ColPrac](https://github.com/SciML/ColPrac) guidelines is recommended. 
+
+[![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
 
 ## Versioning
 

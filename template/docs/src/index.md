@@ -40,12 +40,6 @@ For information on contributing to this project, see the [Developer Guide](devel
 
 Feature requests and bug reports are handled via GitHub [Issues](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues).
 
-When opening an issue, include:
-- a minimal reproducible example
-- the full error message / stacktrace
-- `versioninfo()` output
-- `Pkg.status()` output (or at least the {{{PKG}}}.jl version)
-
 ## API Reference
 
 ```@index

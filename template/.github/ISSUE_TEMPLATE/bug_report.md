@@ -7,32 +7,47 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+## Summary
+
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Minimal Reproducible Example
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+```julia
+julia> sin(Inf)
+ERROR: DomainError with Inf:
+sin(x) is only defined for finite x.
+Stacktrace:
+ [1] sin_domain_error(x::Float64)
+   @ Base.Math .\special\trig.jl:28
+ [2] sin(x::Float64)
+   @ Base.Math .\special\trig.jl:39
+ [3] top-level scope
+   @ REPL[2]:1
+```
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Environment
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+```julia
+julia> versioninfo()
+Julia Version 1.10.10
+Commit 95f30e51f4 (2025-06-27 09:51 UTC)
+Build Info:
+  Official https://julialang.org/ release
+Platform Info:
+  OS: Windows (x86_64-w64-mingw32)
+  CPU: 8 × 11th Gen Intel(R) Core(TM) i7-1185G7 @ 3.00GHz
+  WORD_SIZE: 64
+  LIBM: libopenlibm
+  LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
+Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+julia>  import Pkg; Pkg.status("{{{PKG}}}")
+Status `C:\Users\user\.julia\environments\v1.10\Project.toml`
+  [8fce2d05] {{{PKG}}} v0.0.1 `https://github.com/{{{OWNER}}}/{{{PKG}}}.jl.git#main`
 
-**Additional context**
+```
+
+## Additional context
+
 Add any other context about the problem here.
