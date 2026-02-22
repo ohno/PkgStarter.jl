@@ -132,7 +132,7 @@ end
 """
 $(DocStringExtensions.TYPEDSIGNATURES)
 """
-function create_repo(access_token::String, owner_name::String, repo_name::String)
+function create_repo(access_token::String, owner_name::String, repo_name::String, package_description::String)
     owner = GitHub.owner(owner_name)
     if owner.typ == "User"
         url = "https://api.github.com/user/repos"
@@ -141,6 +141,7 @@ function create_repo(access_token::String, owner_name::String, repo_name::String
     end
     body = JSON3.write(Dict(
         "name" => repo_name,
+        "description" => package_description,
         "private" => false,
         "homepage" => "https://$(owner_name).github.io/$(repo_name)",
         "auto_init" => true,
@@ -465,12 +466,13 @@ end
 """
 $(DocStringExtensions.TYPEDSIGNATURES)
 """
-function generate_template_dict(owner_name::String, repo_name::String, author_names::Vector{String})
+function generate_template_dict(owner_name::String, repo_name::String, author_names::Vector{String}, package_description::String)
 
     ctx = Dict(
         "PKG"      => replace(repo_name, ".jl" => ""),
         "REPO"     => repo_name,
         "OWNER"    => owner_name,
+        "DESCR"    => package_description,
         "UUID"     => string(UUIDs.uuid4()),
         "AUTHORS"  => author_names,
         "LICENSOR" => join(author_names, ", "),
