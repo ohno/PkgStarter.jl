@@ -6,9 +6,9 @@ CurrentModule = {{{PKG}}}
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://{{{OWNER}}}.github.io/{{{PKG}}}.jl/stable/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://{{{OWNER}}}.github.io/{{{PKG}}}.jl/dev/)
+[![License](https://img.shields.io/github/license/{{{OWNER}}}/{{{PKG}}}.jl)](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/blob/main/LICENSE)
 [![Build Status](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/{{{OWNER}}}/{{{PKG}}}.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/{{{OWNER}}}/{{{PKG}}}.jl)
-[![License](https://img.shields.io/github/license/{{{OWNER}}}/{{{PKG}}}.jl)](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/blob/main/LICENSE)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![JET Test](https://img.shields.io/badge/%F0%9F%9B%A9%EF%B8%8F_tested_with-JET.jl-233f9a)](https://github.com/aviatesk/JET.jl)
 [![code style: runic](https://img.shields.io/badge/code_style-%E1%9A%B1%E1%9A%A2%E1%9A%BE%E1%9B%81%E1%9A%B2-black)](https://github.com/fredrikekre/Runic.jl)
@@ -18,7 +18,7 @@ CurrentModule = {{{PKG}}}
 
 ## Installation
 
-Run the following command in the Julia REPL or in a notebook:
+Run the following command in the Julia REPL (or in a notebook):
 
 ```julia
 julia> import Pkg; Pkg.add(url="https://github.com/{{{OWNER}}}/{{{PKG}}}.jl.git")
@@ -26,7 +26,7 @@ julia> import Pkg; Pkg.add(url="https://github.com/{{{OWNER}}}/{{{PKG}}}.jl.git"
 
 ## Quick Start
 
-After installation, run the following example to load the package and verify it works:
+After installation, run the following example to load the package and verify that it works:
 
 ```@repl
 import {{{PKG}}}; {{{PKG}}}.hello()
@@ -38,11 +38,11 @@ For detailed usage instructions and examples, see the [User Guide](user.md).
 
 ## Developer Guide
 
-For information on contributing to this project, see the [Developer Guide](developer.md).
+For contribution and maintenance workflows, see the [Developer Guide](developer.md).
 
 ## Support
 
-Feature requests and bug reports are handled via GitHub [Issues](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues).
+Feature requests and bug reports are handled through GitHub [Issues](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues).
 
 ## API Reference
 

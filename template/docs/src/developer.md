@@ -4,38 +4,37 @@ CurrentModule = {{{PKG}}}
 
 # Developer Guide
 
-Open an [issue](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues) before starting significant work. The [ColPrac](https://github.com/SciML/ColPrac) guidelines is recommended.
+If you are planning significant changes, open an [issue](https://github.com/ohno/MyPkg49.jl/issues) first. The [ColPrac](https://github.com/SciML/ColPrac) guidelines is recommended.
 
-## Local Setup
+## One-Time Local Setup
 
-This procedure is required only once. Install [Revise.jl](https://github.com/timholy/Revise.jl) and [Runic.jl](https://github.com/fredrikekre/Runic.jl), and clone this [repository](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl).
+Clone the [repository](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl) and install development tools, [Revise.jl](https://github.com/timholy/Revise.jl) and [Runic.jl](https://github.com/fredrikekre/Runic.jl).
 
 ```sh
-# Install Tools
-julia --startup-file=no -e 'import Pkg; Pkg.add("Revise")'
-julia --project=@runic --startup-file=no -e 'using Pkg; Pkg.add("Runic")'
-
-# Clone Repo
+# Clone the repository
 git clone https://github.com/{{{OWNER}}}/{{{PKG}}}.jl.git
 cd {{{PKG}}}.jl
 
-# Start Session
-julia --startup-file=no -i -E 'using Revise; import Pkg; Pkg.activate("."); using {{{PKG}}}' 
+# Install tools
+julia --startup-file=no -e 'import Pkg; Pkg.add("Revise")'
+julia --project=@runic --startup-file=no -e 'using Pkg; Pkg.add("Runic")'
+
+# Instantiate dependencies
+julia --project=. --startup-file=no -e 'using Pkg; Pkg.instantiate()'
 ```
 
-You're ready to start with the Step 3 of [How to develop a Julia package](https://julialang.org/contribute/developing_package/#step_3_write_code).
+For Julia package development basics, see:
 
-https://pkgdocs.julialang.org/v1/creating-packages/
+- [How to develop a Julia package](https://julialang.org/contribute/developing_package/)
+- [Pkg: Creating packages](https://pkgdocs.julialang.org/v1/creating-packages/)
 
-## Development Flow
+## Daily Development Flow
 
-1. Start an interactive session with [Revise.jl](https://github.com/timholy/Revise.jl).
-2. Change codes.
-  - DocString https://documenter.juliadocs.org/stable/man/guide/#Adding-Some-Docstrings
-  - Use `julia --project=. --startup-file=no -e 'import Pkg; Pkg.add("Something"); Pkg.resolve(); Pkg.instantiate()'` to add `Something.jl` as a dependency. [Project.toml](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/blob/main/Project.toml) will be updated.
-3. Run formatter. This project uses [Runic](https://github.com/fredrikekre/Runic.jl), a code formatter with rules set in stone. Runic have no configuration.
-4. Run the local test suite before pushing commits. [Aqua.jl](https://github.com/JuliaTesting/Aqua.jl) and [JET.jl](https://github.com/aviatesk/JET.jl)
-5. Build the documentation locally. Run the first command once to set up the docs environment, and run the second command to rebuild the documentation.
+1. Start an interactive session with [Revise.jl](https://github.com/timholy/Revise.jl):
+2. Change code.
+3. Format code with [Runic.jl](https://github.com/fredrikekre/Runic.jl).
+4. Run tests.
+5. Build documentation locally.
 
 ```sh
 # Start with Revise.jl
@@ -43,7 +42,7 @@ cd {{{PKG}}}.jl
 julia --startup-file=no -i -E 'using Revise; import Pkg; Pkg.activate("."); using {{{PKG}}}'
 
 # Run Formatter
-julia --project=@runic --startup-file=no -e 'using Runic; Runic.main(["--inplace", "src/"])'
+julia --project=@runic --startup-file=no -e 'using Runic; exit(Runic.main(ARGS))' -- --inplace .
 
 # Run Test
 julia --project=. --startup-file=no -e 'using Pkg; Pkg.test()'
@@ -52,6 +51,10 @@ julia --project=. --startup-file=no -e 'using Pkg; Pkg.test()'
 julia --project=docs --startup-file=no -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate();'
 julia --project=docs --startup-file=no -e 'include("docs/make.jl")'
 ```
+
+To update the source code:
+- When make new functions and update docstrings, refer to [Documenter: Adding docstrings](https://documenter.juliadocs.org/stable/man/guide/#Adding-Some-Docstrings).
+- If you need a new dependency, use `julia --project=. --startup-file=no -e 'import Pkg; Pkg.add("SomePackage"); Pkg.resolve(); Pkg.instantiate()'`. Change `SomePackage` to the package name.
 
 ## Versioning and Registering (for Maintainers)
 
