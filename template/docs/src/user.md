@@ -16,6 +16,7 @@ import {{{PKG}}}
 ## Examples
 
 ```@example
+import MyPkg49
 text_1 = {{{PKG}}}.hello()
 text_2 = "Goodbye, World!"
 text_1 * " " * text_2

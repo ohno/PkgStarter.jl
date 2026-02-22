@@ -1,7 +1,7 @@
 using {{{PKG}}}
 using Documenter
 
-DocMeta.setdocmeta!({{{PKG}}}, :DocTestSetup, :(using {{{PKG}}}); recursive=true)
+DocMeta.setdocmeta!({{{PKG}}}, :DocTestSetup, :(using {{{PKG}}}); recursive = true)
 
 makedocs(;
     modules = [{{{PKG}}}],
