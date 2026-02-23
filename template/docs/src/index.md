@@ -60,17 +60,6 @@ close(file) # hide
 println(text) # hide
 ```
 
-## License
-
-This package is released under the [MIT License](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/blob/main/LICENSE).
-
-```@example
-file = open("../../LICENSE", "r") # hide
-text = Base.read(file, String) # hide
-close(file) # hide
-println(text) # hide
-```
-
 ## Acknowledgments
 
 This package is written in the [Julia programming language](https://julialang.org/), built on an initial project template generated using [PkgStarter.jl](https://github.com/ohno/PkgStarter.jl). This repository is hosted on [GitHub](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl), and continuous integration is run using [GitHub Actions](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/actions).
