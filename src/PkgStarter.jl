@@ -330,7 +330,7 @@ end
 $(DocStringExtensions.TYPEDSIGNATURES)
 """
 function get_codecov_url(owner_name::String, repo_name::String)::String
-    return "https://app.codecov.io/gh/$(owner_name)/$(repo_name)"
+    return "https://app.codecov.io/gh/$(owner_name)/$(repo_name)/new"
 end
 
 """
@@ -369,10 +369,6 @@ function set_deploy_key(access_token::String, owner_name::String, repo_name::Str
         return false
     end
 end
-
-# function genkeys(user_name::String, repo_name::String)
-#     return DocumenterTools.genkeys(; user = user_name, repo = repo_name)
-# end
 
 # Commit
 
@@ -512,6 +508,9 @@ end
 # Template
 
 """
+!!! warning
+    This function is only for developers. This function updates the template files in the `PkgStarter.jl/template` directory.
+
 Signature:
 
 $(DocStringExtensions.TYPEDSIGNATURES)
@@ -613,5 +612,7 @@ function generate_template_dict(owner_name::String, repo_name::String, author_na
     return paths_and_contents
 
 end
+
+# UI
 
 end
