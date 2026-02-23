@@ -18,7 +18,7 @@ CurrentModule = {{{PKG}}}
 
 ## Installation
 
-Run the following command in the Julia REPL (or in a notebook):
+Run the following command in the Julia REPL or a notebook:
 
 ```julia
 julia> import Pkg; Pkg.add(url="https://github.com/{{{OWNER}}}/{{{PKG}}}.jl.git")
@@ -26,7 +26,7 @@ julia> import Pkg; Pkg.add(url="https://github.com/{{{OWNER}}}/{{{PKG}}}.jl.git"
 
 ## Quick Start
 
-After installation, run the following example to load the package and verify that it works:
+After installation, run the following to load the package and verify it works:
 
 ```@repl
 import {{{PKG}}}; {{{PKG}}}.hello()
@@ -40,18 +40,18 @@ For detailed usage instructions and examples, see the [User Guide](user.md).
 
 For contribution and maintenance workflows, see the [Developer Guide](developer.md).
 
-## Support
-
-Feature requests and bug reports are handled through GitHub [Issues](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues).
-
 ## API Reference
 
 ```@index
 ```
 
+## Support
+
+Feature requests and bug reports are handled through GitHub [Issues](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues).
+
 ## Citation
 
-[CITATION.bib](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/blob/main/CITATION.bib) is available for citing this package.
+Use [CITATION.bib](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/blob/main/CITATION.bib) to cite this package.
 
 ```@example
 file = open("../../CITATION.bib", "r") # hide
@@ -71,6 +71,6 @@ close(file) # hide
 println(text) # hide
 ```
 
-## Acknowledgment
+## Acknowledgments
 
 This package is written in the [Julia programming language](https://julialang.org/), built on an initial project template generated using [PkgStarter.jl](https://github.com/ohno/PkgStarter.jl). This repository is hosted on [GitHub](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl), and continuous integration is run using [GitHub Actions](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/actions).
