@@ -4,7 +4,7 @@ CurrentModule = {{{PKG}}}
 
 # User Guide
 
-Before starting the tutorial, complete the [Installation](@ref) and [Quick Start](@ref) sections.
+Before starting the tutorial, complete the [Installation](@ref) and [Quick Start](@ref) sections. Feature requests and bug reports are handled through GitHub [Issues](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues).
 
 ## Tutorial
 

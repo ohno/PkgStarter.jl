@@ -21,10 +21,8 @@ CurrentModule = {{{PKG}}}
 Run the following command in the Julia REPL or a notebook:
 
 ```julia
-julia> import Pkg; Pkg.add(url="https://github.com/{{{OWNER}}}/{{{PKG}}}.jl.git")
+import Pkg; Pkg.add(url="https://github.com/{{{OWNER}}}/{{{PKG}}}.jl.git")
 ```
-
-## Quick Start
 
 After installation, run the following to load the package and verify it works:
 
@@ -44,10 +42,6 @@ For contribution and maintenance workflows, see the [Developer Guide](developer.
 
 ```@index
 ```
-
-## Support
-
-Feature requests and bug reports are handled through GitHub [Issues](https://github.com/{{{OWNER}}}/{{{PKG}}}.jl/issues).
 
 ## Citation
 
