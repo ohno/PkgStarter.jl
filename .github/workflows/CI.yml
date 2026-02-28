@@ -71,6 +71,6 @@ jobs:
         shell: julia --project=docs --color=yes {0}
         run: |
           using Documenter: DocMeta, doctest
-          using PkgStarter
-          DocMeta.setdocmeta!(PkgStarter, :DocTestSetup, :(using PkgStarter); recursive=true)
-          doctest(PkgStarter)
+          using PkgFactory
+          DocMeta.setdocmeta!(PkgFactory, :DocTestSetup, :(using PkgFactory); recursive=true)
+          doctest(PkgFactory)

@@ -1,15 +1,15 @@
-using PkgStarter
+using PkgFactory
 using Documenter
 using DocumenterMermaid
 
-DocMeta.setdocmeta!(PkgStarter, :DocTestSetup, :(using PkgStarter); recursive=true)
+DocMeta.setdocmeta!(PkgFactory, :DocTestSetup, :(using PkgFactory); recursive=true)
 
 makedocs(;
-    modules=[PkgStarter],
+    modules=[PkgFactory],
     authors="Shuhei Ohno",
-    sitename="PkgStarter.jl",
+    sitename="PkgFactory.jl",
     format=Documenter.HTML(;
-        canonical="https://ohno.github.io/PkgStarter.jl",
+        canonical="https://ohno.github.io/PkgFactory.jl",
         edit_link="main",
         assets=String[],
     ),
@@ -21,6 +21,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/ohno/PkgStarter.jl",
+    repo="github.com/ohno/PkgFactory.jl",
     devbranch="main",
 )

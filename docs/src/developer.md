@@ -1,6 +1,6 @@
 # Developer Guide
 
-This page describes how to develop PkgStarter.jl locally (tests, docs, and common maintenance tasks). For feature requests or behavior changes, please open an Issue first to discuss motivation, use-cases, and compatibility. Once we agree on the direction, PRs are welcome.
+This page describes how to develop PkgFactory.jl locally (tests, docs, and common maintenance tasks). For feature requests or behavior changes, please open an Issue first to discuss motivation, use-cases, and compatibility. Once we agree on the direction, PRs are welcome.
 
 Generate Documentation:
 
@@ -26,7 +26,7 @@ julia --project=. -e 'import Pkg; Pkg.instantiate()'
 Development REPL (with Revise):
 
 ```sh
-julia -i -E 'using Revise; import Pkg; Pkg.activate("."); using PkgStarter; PkgStarter.hello()'
+julia -i -E 'using Revise; import Pkg; Pkg.activate("."); using PkgFactory; PkgFactory.hello()'
 ```
 
 OAuth Device Flow Sequence Diagram:
@@ -35,7 +35,7 @@ OAuth Device Flow Sequence Diagram:
 sequenceDiagram
   autonumber
   participant UI as UI (CLI or Web)
-  participant App as PkgStarter.jl
+  participant App as PkgFactory.jl
   participant GitHub as GitHub Rest API & Web
 
   %% get device code

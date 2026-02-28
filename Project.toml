@@ -1,4 +1,4 @@
-name = "PkgStarter"
+name = "PkgFactory"
 uuid = "f5938637-db80-4a7e-b041-f9483a1b56a7"
 authors = ["Shuhei Ohno"]
 version = "0.0.4"

@@ -1,4 +1,4 @@
-module PkgStarter
+module PkgFactory
 
 # Packages
 
@@ -34,7 +34,7 @@ function check_status_code()::Bool
         "https://api.github.com/meta";
         retry = true,
         status_exception = false,
-        headers = ["User-Agent" => "PkgStarter.jl"],
+        headers = ["User-Agent" => "PkgFactory.jl"],
     )
     return response.status == 200
 end
@@ -49,7 +49,7 @@ function device_flow_begin(client_id::String)::JSON3.Object
             headers = [
                 "Accept" => "application/json",
                 "Content-Type" => "application/x-www-form-urlencoded",
-                "User-Agent" => "PkgStarter.jl",
+                "User-Agent" => "PkgFactory.jl",
             ],
             body = "client_id=$(client_id)&scope=read:user%20public_repo%20repo",
         )
@@ -77,7 +77,7 @@ function device_flow_end(client_id::String, device_code::String)
             headers = [
                 "Accept" => "application/json",
                 "Content-Type" => "application/x-www-form-urlencoded",
-                "User-Agent" => "PkgStarter.jl",
+                "User-Agent" => "PkgFactory.jl",
             ],
             # body = "client_id=$(client_id)&device_code=$(device_code)&grant_type=urn:ietf:params:oauth:grant-type:device_code&client_secret=$(client_secret)"
             body = "client_id=$(client_id)&device_code=$(device_code)&grant_type=urn:ietf:params:oauth:grant-type:device_code",
@@ -119,7 +119,7 @@ function check_repo(access_token::String, owner_name::String, repo_name::String)
                 "Accept" => "application/vnd.github+json",
                 "Authorization" => "Bearer $(access_token)",
                 "X-GitHub-Api-Version" => "2022-11-28",
-                "User-Agent" => "PkgStarter.jl",
+                "User-Agent" => "PkgFactory.jl",
             ],
             status_exception = false,
         )
@@ -264,7 +264,7 @@ function create_repo(access_token::String, owner_name::String, repo_name::String
                 "Accept" => "application/vnd.github+json",
                 "Authorization" => "Bearer $(access_token)",
                 "X-GitHub-Api-Version" => "2022-11-28",
-                "User-Agent" => "PkgStarter.jl",
+                "User-Agent" => "PkgFactory.jl",
             ],
             body = body,
             status_exception = false,
@@ -359,7 +359,7 @@ function set_deploy_key(access_token::String, owner_name::String, repo_name::Str
                 "handle_error" => false,
             ),
         )
-        response2 = PkgStarter.set_repository_secret(access_token, owner_name, repo_name, "DEPLOY_KEY", privkey)
+        response2 = PkgFactory.set_repository_secret(access_token, owner_name, repo_name, "DEPLOY_KEY", privkey)
         if !isnothing(response1.id) && response2
             return true
         else
@@ -452,7 +452,7 @@ paths_and_contents = Dict(
     "hello2.md" => "Hello, 2",
 )
 
-PkgStarter.commit_files_on_github(
+PkgFactory.commit_files_on_github(
     access_token,
     owner_name,
     repo_name,
@@ -509,7 +509,7 @@ end
 
 """
 !!! warning
-    This function is only for developers. This function updates the template files in the `PkgStarter.jl/template` directory.
+    This function is only for developers. This function updates the template files in the `PkgFactory.jl/template` directory.
 
 Signature:
 
@@ -518,7 +518,7 @@ $(DocStringExtensions.TYPEDSIGNATURES)
 Example:
 
 ```julia
-PkgStarter.update_template("OWNER_NAME", "template", ["AUTHOR1", "AUTHOR2"])
+PkgFactory.update_template("OWNER_NAME", "template", ["AUTHOR1", "AUTHOR2"])
 ```
 """
 function update_template(owner_name::String, repo_name::String, author_names::Vector{String})::Dict{String, String}
@@ -594,13 +594,13 @@ function generate_template_dict(owner_name::String, repo_name::String, author_na
 
     paths_and_contents = Dict{String, String}()
 
-    for path in PkgStarter.list_files()
+    for path in PkgFactory.list_files()
         key = relpath(path, "$(@__DIR__)/../template")
         key = replace(key, "\\" => "/")
         if key == "src/PKG.jl"
             key = "src/$(ctx["PKG"]).jl"
         end
-        text = PkgStarter.load_file(path)
+        text = PkgFactory.load_file(path)
         rendered = if key[end-3:end] == ".yml" && key[end-5:end] != "CI.yml"
             text
         else

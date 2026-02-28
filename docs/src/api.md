@@ -1,5 +1,5 @@
 ```@meta
-CurrentModule = PkgStarter
+CurrentModule = PkgFactory
 ```
 
 # API Reference
@@ -8,6 +8,6 @@ CurrentModule = PkgStarter
 ```
 
 ```@autodocs
-Modules = [PkgStarter]
+Modules = [PkgFactory]
 ```
 
