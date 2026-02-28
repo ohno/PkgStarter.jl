@@ -1,5 +1,5 @@
 ```@meta
-CurrentModule = PkgStarter
+CurrentModule = PkgFactory
 ```
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://ohno.github.io/PkgFactory.jl/stable/)
