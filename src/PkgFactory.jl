@@ -21,7 +21,7 @@ const GITHUB_OAUTH_CLIENT_ID = "Ov23libqpCkC6Z5pSlFG"
 const GITHUB_OAUTH_CLIENT_SECRET = "" # Device Flow
 
 function hello()
-    return "Hello, World!"
+    return "Hello, World!2"
 end
 
 # Authorization
@@ -94,6 +94,18 @@ function device_flow_end(client_id::String, device_code::String)
             scope                    = "",
         )))
     end
+end
+
+function authorize_user(client_id::String, client_secret::String)
+    device_flow = device_flow_begin(client_id)
+    if device_flow.device_code == ""
+        return "Error: Failed to begin device flow"
+    end
+    device_flow_end(client_id, device_flow.device_code)
+    if device_flow_end.access_token == ""
+        return "Error: Failed to end device flow"
+    end
+    return device_flow_end.access_token
 end
 
 """
@@ -614,5 +626,95 @@ function generate_template_dict(owner_name::String, repo_name::String, author_na
 end
 
 # UI
+
+function create_package(owner_name::String, repo_name::String, author_names::Vector{String}, package_description::String, codecov_token::String)
+    check_name = PkgFactory.verify_package_name(repo_name)
+    if check_name != "OK"
+        return "Error: Package name is not valid: $(check_name)"
+    end
+    PkgFactory.create_repo(PERSONAL_ACCESS_TOKEN, owner_name, repo_name, package_description)
+    PkgFactory.set_deploy_key(PERSONAL_ACCESS_TOKEN, owner_name, repo_name)
+    PkgFactory.get_codecov_url(owner_name, repo_name)
+    PkgFactory.set_codecov(PERSONAL_ACCESS_TOKEN, owner_name, repo_name, codecov_token)    
+    PkgFactory.create_branch_gh_pages(PERSONAL_ACCESS_TOKEN, owner_name, repo_name)
+    paths_and_contents = PkgFactory.generate_template_dict(owner_name, repo_name, author_names, package_description)
+    PkgFactory.commit_files_on_github(PERSONAL_ACCESS_TOKEN, owner_name, repo_name, "main", "Using PkgFactory.jl", paths_and_contents)
+    return "Success: $(repo_name) is created"
+end
+
+"""
+$(DocStringExtensions.TYPEDSIGNATURES)
+"""
+function CLI()
+    println("Creating package...")
+end
+
+
+# using HTTP
+# using JSON3
+# using Oxygen
+# @oxidize
+
+# function start(
+#     host = get(ENV, "HOST", "0.0.0.0"),
+#     port = parse(Int, get(ENV, "PORT", "8000")),
+# )
+#     @info "Starting PkgFactory.jl server at http://localhost:$(port)/"
+#     App.serve(host = host, port = port, revise = :eager)
+# end
+
+# # staticfiles("$(@__DIR__)/html", "/")
+# dynamicfiles("$(@__DIR__)/html", "/")
+
+# @get "/hello" function (req::HTTP.Request)
+#     return "Hello, World!"
+# end
+
+# @get "/random" function (req::HTTP.Request)
+#     return rand()
+# end
+
+# @get "/authorize/{user}" function(req::HTTP.Request, user::String)
+#   return "Authorize $user"
+# end
+
+# @get "/authorize/status" function(req::HTTP.Request)
+#   status = Authorize.check_status_code()
+#   return Dict("status" => status, "message" => status ? "GitHub API is accessible" : "GitHub API is not accessible")
+# end
+
+# @post "/authorize/device-flow" function(req::HTTP.Request)
+#   try
+#     body = JSON3.read(HTTP.body(req))
+#     client_id = get(body, :client_id, "")
+
+#     if isempty(client_id)
+#       return (status = 400, body = Dict("error" => "client_id is required"))
+#     end
+
+#     result = Authorize.device_flow(client_id)
+#     return result
+#   catch e
+#     return (status = 400, body = Dict("error" => "Invalid request: $(string(e))"))
+#   end
+# end
+
+# @post "/authorize/access-token" function(req::HTTP.Request)
+#   try
+#     body = JSON3.read(HTTP.body(req))
+#     client_id = get(body, :client_id, "")
+#     client_secret = get(body, :client_secret, "")
+#     device_code = get(body, :device_code, "")
+
+#     if isempty(client_id) || isempty(client_secret) || isempty(device_code)
+#       return (status = 400, body = Dict("error" => "client_id, client_secret, and device_code are required"))
+#     end
+
+#     access_token = Authorize.get_access_token(client_id, client_secret, device_code)
+#     return Dict("access_token" => access_token)
+#   catch e
+#     return (status = 400, body = Dict("error" => "Invalid request: $(string(e))"))
+#   end
+# end
 
 end
